@@ -1,0 +1,52 @@
+We aim for algorithms that execute efficiently even when the input size n is big.
+A common situation in algorithm design is where we use two nested loops (This is called brute force algorithm)
+
+In practice, an efficient algorithm is often required to have a time complexity of O(n) or O(nlogn).
+* O(n) normally goes for traversing through the entire loop
+* O(nlogn) normally goes for the part of sorting
+
+An algorithm that goes as a left to right traversal is normally called a single traversal loop and it is O(n)
+A loop in an efficient algorithm may contain:
+* Updates of variable values using other variables or individual elements of the input
+* arithmetic operations related to variable updates
+* if commands that affect the variable updates
+But the loop may not contain
+* Other loops that go through the input
+* Slow operations that process the input
+* Slow function calls (sum, min, max that is applied to the whole input)\
+
+
+
+* Example: Stock trading
+You are given the price of a stock for n days.
+Your task is figure out the highest profit you could have made if you had bought the stock on 
+one day and sold it on another day.
+
+Day: 0, 1, 2, 3, 4, 5, 6, 7
+Price: 3, 7, 5, 1, 4, 6, 2, 3
+
+Here the highest profit is 6 – 1 = 5, achieved by buying on day 3 and selling on day 5.
+
+Straightforward algorithm: 
+    def best_profit(prices):
+        n = len(prices)
+        best = 0
+        for i in range(n):
+            for j in range(i + 1, n):
+                best = max(best, prices[j] - prices[i])
+        return best
+
+its time complexity is O(n^2), which makes it slow for big n. 
+We would like to have a more efficient algorithm that has only one loop.
+
+Finally we have:
+We can fix the problem as follows:
+
+def best_profit(prices):
+    n = len(prices)
+    best = 0
+    min_price = prices[0]
+    for i in range(n):
+        min_price = min(min_price, prices[i])
+        best = max(best, prices[i] - min_price)
+    return best
