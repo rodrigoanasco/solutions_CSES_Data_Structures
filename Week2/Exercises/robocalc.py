@@ -1,5 +1,43 @@
 def calculate(input, rules):
-    # TODO
+    # Step 1: Build the tape by adding L and R
+    tape = ['L'] + list(input) + ['R']
+    pos = 0         # Start at the 'L'
+    state = 1       # Initial state
+    steps = 0       # Step counter
+
+    # Step 2: Convert rules to a dictionary for fast lookup
+    rule_map = {}
+    for current_symbol, current_state, new_symbol, new_state, action in rules:
+        rule_map[(current_symbol, current_state)] = (new_symbol, new_state, action)
+
+    # Step 3: Run up to 1000 steps
+    while steps < 1000:
+        current_symbol = tape[pos]
+        key = (current_symbol, state)
+
+        if key not in rule_map:
+            return False  # No matching rule
+
+        new_symbol, new_state, action = rule_map[key]
+        tape[pos] = new_symbol
+        state = new_state
+
+        if action == "LEFT":
+            pos -= 1
+            if pos < 0:
+                return False
+        elif action == "RIGHT":
+            pos += 1
+            if pos >= len(tape):
+                return False
+        elif action == "ACCEPT":
+            return True
+        elif action == "REJECT":
+            return False
+
+        steps += 1
+
+    return False 
 
 if __name__ == "__main__":
     rules = []
